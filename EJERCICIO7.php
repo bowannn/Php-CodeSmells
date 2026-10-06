@@ -25,22 +25,27 @@ echo "</pre>";*/
     visualizacion del menu
     */
 	$i = 1;
-	foreach ($arrayCategories as $index => $value) {
-		$xhtml = "<ul class=\"subcategory-menu sub-sidenav\" id=\"subcategory-menu-{$i}\">\n";
-		$xhtml .= "<li><a href=\"#\" class=\"back waves-effect\"><i class=\"material-icons\">arrow_back</i> Atrás</a></li>\n";
-		$xhtml .= "<li><div class=\"divider\"></div></li>\n";
-		$xhtml .= "<li><a class=\"subheader subcategory-title truncate\">{$value['nombre']}</a></li>\n";
-		foreach ($value as $index1 => $value1) {
-			if($index1 == "hijos"){
-				foreach ($value1 as $index2 => $value2) {
-					$xhtml .= "<li><a href=\"#\" class=\"waves-effect\">{$value2['nombre']}</a></li>\n";
-				}
-			}
-		}
-		$xhtml .= "</ul>\n";
-		$i++;
-		echo $xhtml;
-	}
+    function buildSubcategoryHtml($id, $categoryData) {
+        $xhtml = "<ul class=\"subcategory-menu sub-sidenav\" id=\"subcategory-menu-{$id}\">\n";
+        $xhtml .= "<li><a href=\"#\" class=\"back waves-effect\"><i class=\"material-icons\">arrow_back</i> Atrás</a></li>\n";
+        $xhtml .= "<li><div class=\"divider\"></div></li>\n";
+        $xhtml .= "<li><a class=\"subheader subcategory-title truncate\">{$categoryData['nombre']}</a></li>\n";
+        
+        // Simplificación de bucle anidado validando el índice directamente
+        if (isset($categoryData['hijos'])) {
+            foreach ($categoryData['hijos'] as $hijo) {
+                $xhtml .= "<li><a href=\"#\" class=\"waves-effect\">{$hijo['nombre']}</a></li>\n";
+            }
+        }
+        $xhtml .= "</ul>\n";
+        return $xhtml;
+    }
+
+    // Bucle principal más limpio y fácil de mantener
+    foreach ($arrayCategories as $index => $value) {
+        echo buildSubcategoryHtml($i++, $value);
+    }
+
 	?>
     <!-- Mobile menu -->
     <ul class="mobile-class-menu sidenav" id="mobile-menu" data-target="accordion-menu">
