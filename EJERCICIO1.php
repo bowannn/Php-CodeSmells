@@ -77,13 +77,19 @@
 
 		if(!$error){
 			//create client object
-			$client = new nusoap_client($wsdl, true);
-			$err = $client->getError();
-			if ($err) {
-				echo '<h2>Constructor error</h2>' . $err;
-				// At this point, you know the call that follows will fail
-			    exit();
+			// Se extrae la lógica a una función reutilizable
+			function getSoapClient($wsdl) {
+				$client = new nusoap_client($wsdl, true);
+				$err = $client->getError();
+				if ($err) {
+					die('<h2>Error en el Constructor</h2>' . $err);
+				}
+				return $client;
 			}
+
+			// Su uso en los bloques POST se reduce a una sola línea:
+			// $client = getSoapClient($wsdl);
+
 			 try {
 				/** Call insert book method */
 				 $response =  $client->call('insertBook', array($title, $author, $price, $isbn, $category));

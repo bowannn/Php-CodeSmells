@@ -1,0 +1,6 @@
+projectKey=Taller-Php-CodeSmells
+serverUrl=http://localhost:9000
+serverVersion=26.9.0.129388
+dashboardUrl=http://localhost:9000/dashboard?id=Taller-Php-CodeSmells
+ceTaskId=845ad7bd-383b-4464-86ed-0a5b70f8539c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=845ad7bd-383b-4464-86ed-0a5b70f8539c
