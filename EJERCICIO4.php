@@ -31,17 +31,12 @@ class LoginRepository extends Conn {
 		// $row es un array
 		$row = $resource->fetchAll(PDO::FETCH_ASSOC);
 		if(count($row) == 1){
-			session_start();
-			foreach ($row as $key => $fila)
-			$_SESSION['nombre'] = $fila['NOMBRE'];
-			$_SESSION['correo'] = $fila['CORREO'];
-			$_SESSION['permiso'] = $fila['PERMISO'];
-			$_SESSION['clave'] = $fila['CLAVE'];
-			return true;
+			// El repositorio solo retorna la entidad/arreglo de base de datos
+			// La asignación de variables de $_SESSION se traslada al Controlador
+			return $row[0];
 		}else{
-			return false;
+			return null;
 		}
-//		$_SESSION['usu_nombre'] = $row['nombre'];
 
 	}
 
