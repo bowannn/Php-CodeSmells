@@ -11,33 +11,22 @@
 	$result_all = array();
 	$response = '';
 	$wsdl = "http://localhost/webServicesUSTA/webservice-server.php?wsdl";
-	if(isset($_POST['sub'])){
-
-		$isbn = trim($_POST['isbn']);
-		//echo 'aca toy ISBN->'.$isbn;exit();
-		if(!$isbn){
-			$error = 'ISBN no puede estar en blanco.';
-		}
-
-		if(!$error){
-			//create client object
-			$client = new nusoap_client($wsdl, true);
-			$err = $client->getError();
-
-			if ($err) {
-				echo '<h2>Error en el Constructor</h2>' . $err;
-				// At this point, you know the call that follows will fail
-			    exit();
+		function processClientRequest($postData, $wsdl) {
+			if (isset($postData['sub'])) {
+				return fetchSingleBook($postData['isbn'], $wsdl);
 			}
-			 try {
-
-				$result = $client->call('fetchBookData', array($isbn));
-				$result = json_decode($result);
-			  }catch (Exception $e) {
-			    echo 'Caught exception: ',  $e->getMessage(), "\n";
-			 }
+			if (isset($postData['sub_all'])) {
+				return fetchAllBooks($wsdl);
+			}
+			if (isset($postData['addbtn'])) {
+				return insertNewBook($postData, $wsdl);
+			}
+			return null; // Ninguna acción requerida
 		}
-	}
+
+		// Las implementaciones (fetchSingleBook, insertNewBook) quedan separadas
+		// y la ejecución principal se reduce a:
+		$actionResult = processClientRequest($_POST, $wsdl);
 
 	if(isset($_POST['sub_all'])){
 
@@ -161,7 +150,8 @@
 		        <td><?php echo $result->isbn; ?></td>	
 		        <td><?php echo $result->category; ?></td>
 		      </tr>
-      <?php}
+      <?php
+	  }
   		else{ ?>
   			<tr>
 		        <td colspan='5'>Ingrese un ISBN valido y de click en el boton de traer información del libro</td>
